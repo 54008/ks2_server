@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pcx.mapper.base.ProvincesBaseMapper">
+
+
+    <insert id="insertProvinces" >
+        INSERT INTO `provinces`
+        (
+        <trim suffixOverrides=",">
+                    <if test="province_id!=null">
+                        `province_id`,
+                    </if>
+                    <if test="province_name!=null">
+                        `province_name`,
+                    </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+                <if test="province_id!=null">
+                    #{province_id},
+                </if>
+                <if test="province_name!=null">
+                    #{province_name},
+                </if>
+        </trim>
+        )
+    </insert>
+
+
+
+
+    <update id="updateProvinces">
+        UPDATE `provinces`
+        SET
+        <trim suffixOverrides=",">
+            <if test="province_name != null and province_name!=''">
+                `province_name` = #{province_name},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+                `province_id` = #{province_id} and
+        </trim>
+    </update>
+
+    <update id="update">
+        UPDATE `provinces`
+        SET
+        <trim suffixOverrides=",">
+        <if test="set.province_name != null and set.province_name!=''">
+            `province_name` = #{set.province_name},
+        </if>
+        </trim>
+        <trim prefix="where" suffixOverrides="and | or">
+                <if test="where.province_idList != null">
+                    `province_id` in
+                    <foreach collection="where.province_idList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.province_idSt !=null">
+                `province_id` >= #{where.province_idSt} and
+            </if>
+            <if test="where.province_idEd!=null">
+                `province_id` &lt;= #{where.province_idEd} and
+            </if>
+                <if test="where.province_nameList != null">
+                    `province_name` in
+                    <foreach collection="where.province_nameList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyProvince_name!=null and where.fuzzyProvince_name.size()>0">
+                (
+                <foreach collection="where.fuzzyProvince_name"  separator="or" item="item">
+                    `Province_name` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyProvince_name!=null and where.rightFuzzyProvince_name.size()>0">
+                (
+                <foreach collection="where.rightFuzzyProvince_name"  separator="or" item="item">
+                    `Province_name` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+        </trim>
+    </update>
+
+
+    <resultMap type="com.pcx.model.Provinces" id="ProvincesMap">
+        <result property="province_id" column="province_id"/>
+        <result property="province_name" column="province_name"/>
+    </resultMap>
+
+
+    <select id="queryProvinces" resultMap="ProvincesMap">
+        select
+        <include refid="baseResult"></include>
+        from  `provinces`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="province_id != null">
+                `province_id` = #{province_id} and
+            </if>
+            <if test="province_name != null and province_name!=''">
+                `province_name` = #{province_name} and
+            </if>
+            <if test = "(_parameter instanceof com.pcx.model.Provinces$QueryBuilder) == true">
+                <if test="province_idList != null">
+                    `province_id` in
+                    <foreach collection="province_idList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="province_idSt !=null">
+                    `province_id` >= #{province_idSt} and
+                </if>
+                <if test="province_idEd!=null">
+                    `province_id` &lt;= #{province_idEd} and
+                </if>
+                <if test="province_nameList != null">
+                    `province_name` in
+                    <foreach collection="province_nameList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyProvince_name!=null and fuzzyProvince_name.size()>0">
+                    (
+                    <foreach collection="fuzzyProvince_name"  separator="or" item="item">
+                        `Province_name` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyProvince_name!=null and rightFuzzyProvince_name.size()>0">
+                    (
+                    <foreach collection="rightFuzzyProvince_name"  separator="or" item="item">
+                        `Province_name` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryProvincesLimit1" resultMap="ProvincesMap">
+        select
+        <include refid="baseResult"></include>
+        from  `provinces`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="province_id != null">
+                `province_id` = #{province_id} and
+            </if>
+            <if test="province_name != null and province_name!=''">
+                `province_name` = #{province_name} and
+            </if>
+            <if test = "(_parameter instanceof com.pcx.model.Provinces$QueryBuilder) == true">
+                    <if test="province_idList != null">
+                        `province_id` in
+                        <foreach collection="province_idList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="province_idSt !=null">
+                    `province_id` >= #{province_idSt} and
+                </if>
+                <if test="province_idEd!=null">
+                    `province_id` &lt;= #{province_idEd} and
+                </if>
+                    <if test="province_nameList != null">
+                        `province_name` in
+                        <foreach collection="province_nameList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyProvince_name!=null and fuzzyProvince_name.size()>0">
+                    (
+                    <foreach collection="fuzzyProvince_name"  separator="or" item="item">
+                        `Province_name` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyProvince_name!=null and rightFuzzyProvince_name.size()>0">
+                    (
+                    <foreach collection="rightFuzzyProvince_name"  separator="or" item="item">
+                        `Province_name` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+        `province_id`,
+        `province_name`,
+        </trim>
+    </sql>
+
+
+
+    <sql id="baseResult">
+        <trim suffixOverrides=",">
+            <if test = "(_parameter instanceof com.pcx.model.Provinces$QueryBuilder) == true">
+
+                <if test="fetchFields==null">
+                    <include refid="allResult"></include>
+                </if>
+                <if test="fetchFields!=null">
+                    <if test="fetchFields.AllFields !=null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields ==null and fetchFields.fetchFields==null and fetchFields.excludeFields==null and fetchFields.otherFields==null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.fetchFields!=null">
+                    <if test="fetchFields.fetchFields.province_id==true">
+                        `province_id`,
+                    </if>
+                    <if test="fetchFields.fetchFields.province_name==true">
+                        `province_name`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.excludeFields!=null">
+                    <if test="fetchFields.excludeFields.province_id==null">
+                        `province_id`,
+                    </if>
+                    <if test="fetchFields.excludeFields.province_name==null">
+                        `province_name`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.otherFields!=null and fetchFields.otherFields.size>0">
+                        <foreach collection="fetchFields.otherFields" index="index" item="item" separator=",">
+                        `#{item}`
+                        </foreach>
+                    </if>
+                </if>
+            </if>
+            <if test="(_parameter instanceof com.pcx.model.Provinces$QueryBuilder) == false" >
+                <include refid="allResult"></include>
+            </if>
+
+        </trim>
+    </sql>
+
+
+</mapper>

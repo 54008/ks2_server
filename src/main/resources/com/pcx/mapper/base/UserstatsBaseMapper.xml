@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pcx.mapper.base.UserstatsBaseMapper">
+
+
+    <insert id="insertUserstats" >
+        INSERT INTO `userstats`
+        (
+        <trim suffixOverrides=",">
+                    <if test="id!=null">
+                        `id`,
+                    </if>
+                    <if test="score!=null">
+                        `score`,
+                    </if>
+                    <if test="user_rank!=null">
+                        `user_rank`,
+                    </if>
+                    <if test="victories!=null">
+                        `victories`,
+                    </if>
+                    <if test="defeats!=null">
+                        `defeats`,
+                    </if>
+                    <if test="win_rate!=null">
+                        `win_rate`,
+                    </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+                <if test="id!=null">
+                    #{id},
+                </if>
+                <if test="score!=null">
+                    #{score},
+                </if>
+                <if test="user_rank!=null">
+                    #{user_rank},
+                </if>
+                <if test="victories!=null">
+                    #{victories},
+                </if>
+                <if test="defeats!=null">
+                    #{defeats},
+                </if>
+                <if test="win_rate!=null">
+                    #{win_rate},
+                </if>
+        </trim>
+        )
+    </insert>
+
+
+
+
+    <update id="updateUserstats">
+        UPDATE `userstats`
+        SET
+        <trim suffixOverrides=",">
+            <if test="score != null">
+                `score` = #{score},
+            </if>
+            <if test="user_rank != null and user_rank!=''">
+                `user_rank` = #{user_rank},
+            </if>
+            <if test="victories != null">
+                `victories` = #{victories},
+            </if>
+            <if test="defeats != null">
+                `defeats` = #{defeats},
+            </if>
+            <if test="win_rate != null">
+                `win_rate` = #{win_rate},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+                `id` = #{id} and
+        </trim>
+    </update>
+
+    <update id="update">
+        UPDATE `userstats`
+        SET
+        <trim suffixOverrides=",">
+        <if test="set.score != null">
+            `score` = #{set.score},
+        </if>
+        <if test="set.user_rank != null and set.user_rank!=''">
+            `user_rank` = #{set.user_rank},
+        </if>
+        <if test="set.victories != null">
+            `victories` = #{set.victories},
+        </if>
+        <if test="set.defeats != null">
+            `defeats` = #{set.defeats},
+        </if>
+        <if test="set.win_rate != null">
+            `win_rate` = #{set.win_rate},
+        </if>
+        </trim>
+        <trim prefix="where" suffixOverrides="and | or">
+                <if test="where.idList != null">
+                    `id` in
+                    <foreach collection="where.idList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyId!=null and where.fuzzyId.size()>0">
+                (
+                <foreach collection="where.fuzzyId"  separator="or" item="item">
+                    `Id` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyId!=null and where.rightFuzzyId.size()>0">
+                (
+                <foreach collection="where.rightFuzzyId"  separator="or" item="item">
+                    `Id` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.scoreList != null">
+                    `score` in
+                    <foreach collection="where.scoreList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.scoreSt !=null">
+                `score` >= #{where.scoreSt} and
+            </if>
+            <if test="where.scoreEd!=null">
+                `score` &lt;= #{where.scoreEd} and
+            </if>
+                <if test="where.user_rankList != null">
+                    `user_rank` in
+                    <foreach collection="where.user_rankList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test ="where.fuzzyUser_rank!=null and where.fuzzyUser_rank.size()>0">
+                (
+                <foreach collection="where.fuzzyUser_rank"  separator="or" item="item">
+                    `User_rank` like concat('%',#{item},'%')
+                </foreach>
+                ) and
+            </if>
+            <if test ="where.rightFuzzyUser_rank!=null and where.rightFuzzyUser_rank.size()>0">
+                (
+                <foreach collection="where.rightFuzzyUser_rank"  separator="or" item="item">
+                    `User_rank` like concat(#{item},'%')
+                </foreach>
+                ) and
+            </if>
+                <if test="where.victoriesList != null">
+                    `victories` in
+                    <foreach collection="where.victoriesList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.victoriesSt !=null">
+                `victories` >= #{where.victoriesSt} and
+            </if>
+            <if test="where.victoriesEd!=null">
+                `victories` &lt;= #{where.victoriesEd} and
+            </if>
+                <if test="where.defeatsList != null">
+                    `defeats` in
+                    <foreach collection="where.defeatsList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.defeatsSt !=null">
+                `defeats` >= #{where.defeatsSt} and
+            </if>
+            <if test="where.defeatsEd!=null">
+                `defeats` &lt;= #{where.defeatsEd} and
+            </if>
+                <if test="where.win_rateList != null">
+                    `win_rate` in
+                    <foreach collection="where.win_rateList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+            <if test="where.win_rateSt !=null">
+                `win_rate` >= #{where.win_rateSt} and
+            </if>
+            <if test="where.win_rateEd!=null">
+                `win_rate` &lt;= #{where.win_rateEd} and
+            </if>
+        </trim>
+    </update>
+
+
+    <resultMap type="com.pcx.model.Userstats" id="UserstatsMap">
+        <result property="id" column="id"/>
+        <result property="score" column="score"/>
+        <result property="user_rank" column="user_rank"/>
+        <result property="victories" column="victories"/>
+        <result property="defeats" column="defeats"/>
+        <result property="win_rate" column="win_rate"/>
+    </resultMap>
+
+
+    <select id="queryUserstats" resultMap="UserstatsMap">
+        select
+        <include refid="baseResult"></include>
+        from  `userstats`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null and id!=''">
+                `id` = #{id} and
+            </if>
+            <if test="score != null">
+                `score` = #{score} and
+            </if>
+            <if test="user_rank != null and user_rank!=''">
+                `user_rank` = #{user_rank} and
+            </if>
+            <if test="victories != null">
+                `victories` = #{victories} and
+            </if>
+            <if test="defeats != null">
+                `defeats` = #{defeats} and
+            </if>
+            <if test="win_rate != null">
+                `win_rate` = #{win_rate} and
+            </if>
+            <if test = "(_parameter instanceof com.pcx.model.Userstats$QueryBuilder) == true">
+                <if test="idList != null">
+                    `id` in
+                    <foreach collection="idList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyId!=null and fuzzyId.size()>0">
+                    (
+                    <foreach collection="fuzzyId"  separator="or" item="item">
+                        `Id` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyId!=null and rightFuzzyId.size()>0">
+                    (
+                    <foreach collection="rightFuzzyId"  separator="or" item="item">
+                        `Id` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="scoreList != null">
+                    `score` in
+                    <foreach collection="scoreList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="scoreSt !=null">
+                    `score` >= #{scoreSt} and
+                </if>
+                <if test="scoreEd!=null">
+                    `score` &lt;= #{scoreEd} and
+                </if>
+                <if test="user_rankList != null">
+                    `user_rank` in
+                    <foreach collection="user_rankList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test ="fuzzyUser_rank!=null and fuzzyUser_rank.size()>0">
+                    (
+                    <foreach collection="fuzzyUser_rank"  separator="or" item="item">
+                        `User_rank` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyUser_rank!=null and rightFuzzyUser_rank.size()>0">
+                    (
+                    <foreach collection="rightFuzzyUser_rank"  separator="or" item="item">
+                        `User_rank` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test="victoriesList != null">
+                    `victories` in
+                    <foreach collection="victoriesList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="victoriesSt !=null">
+                    `victories` >= #{victoriesSt} and
+                </if>
+                <if test="victoriesEd!=null">
+                    `victories` &lt;= #{victoriesEd} and
+                </if>
+                <if test="defeatsList != null">
+                    `defeats` in
+                    <foreach collection="defeatsList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="defeatsSt !=null">
+                    `defeats` >= #{defeatsSt} and
+                </if>
+                <if test="defeatsEd!=null">
+                    `defeats` &lt;= #{defeatsEd} and
+                </if>
+                <if test="win_rateList != null">
+                    `win_rate` in
+                    <foreach collection="win_rateList" close=")" open="(" separator="," item="item">
+                        #{item}
+                    </foreach> and
+                </if>
+                <if test="win_rateSt !=null">
+                    `win_rate` >= #{win_rateSt} and
+                </if>
+                <if test="win_rateEd!=null">
+                    `win_rate` &lt;= #{win_rateEd} and
+                </if>
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryUserstatsLimit1" resultMap="UserstatsMap">
+        select
+        <include refid="baseResult"></include>
+        from  `userstats`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null and id!=''">
+                `id` = #{id} and
+            </if>
+            <if test="score != null">
+                `score` = #{score} and
+            </if>
+            <if test="user_rank != null and user_rank!=''">
+                `user_rank` = #{user_rank} and
+            </if>
+            <if test="victories != null">
+                `victories` = #{victories} and
+            </if>
+            <if test="defeats != null">
+                `defeats` = #{defeats} and
+            </if>
+            <if test="win_rate != null">
+                `win_rate` = #{win_rate} and
+            </if>
+            <if test = "(_parameter instanceof com.pcx.model.Userstats$QueryBuilder) == true">
+                    <if test="idList != null">
+                        `id` in
+                        <foreach collection="idList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyId!=null and fuzzyId.size()>0">
+                    (
+                    <foreach collection="fuzzyId"  separator="or" item="item">
+                        `Id` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyId!=null and rightFuzzyId.size()>0">
+                    (
+                    <foreach collection="rightFuzzyId"  separator="or" item="item">
+                        `Id` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="scoreList != null">
+                        `score` in
+                        <foreach collection="scoreList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="scoreSt !=null">
+                    `score` >= #{scoreSt} and
+                </if>
+                <if test="scoreEd!=null">
+                    `score` &lt;= #{scoreEd} and
+                </if>
+                    <if test="user_rankList != null">
+                        `user_rank` in
+                        <foreach collection="user_rankList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test ="fuzzyUser_rank!=null and fuzzyUser_rank.size()>0">
+                    (
+                    <foreach collection="fuzzyUser_rank"  separator="or" item="item">
+                        `User_rank` like concat('%',#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                <if test ="rightFuzzyUser_rank!=null and rightFuzzyUser_rank.size()>0">
+                    (
+                    <foreach collection="rightFuzzyUser_rank"  separator="or" item="item">
+                        `User_rank` like concat(#{item},'%')
+                    </foreach>
+                    ) and
+                </if>
+                    <if test="victoriesList != null">
+                        `victories` in
+                        <foreach collection="victoriesList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="victoriesSt !=null">
+                    `victories` >= #{victoriesSt} and
+                </if>
+                <if test="victoriesEd!=null">
+                    `victories` &lt;= #{victoriesEd} and
+                </if>
+                    <if test="defeatsList != null">
+                        `defeats` in
+                        <foreach collection="defeatsList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="defeatsSt !=null">
+                    `defeats` >= #{defeatsSt} and
+                </if>
+                <if test="defeatsEd!=null">
+                    `defeats` &lt;= #{defeatsEd} and
+                </if>
+                    <if test="win_rateList != null">
+                        `win_rate` in
+                        <foreach collection="win_rateList" close=")" open="(" separator="," item="item">
+                            #{item}
+                        </foreach> and
+                    </if>
+                <if test="win_rateSt !=null">
+                    `win_rate` >= #{win_rateSt} and
+                </if>
+                <if test="win_rateEd!=null">
+                    `win_rate` &lt;= #{win_rateEd} and
+                </if>
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+        `id`,
+        `score`,
+        `user_rank`,
+        `victories`,
+        `defeats`,
+        `win_rate`,
+        </trim>
+    </sql>
+
+
+
+    <sql id="baseResult">
+        <trim suffixOverrides=",">
+            <if test = "(_parameter instanceof com.pcx.model.Userstats$QueryBuilder) == true">
+
+                <if test="fetchFields==null">
+                    <include refid="allResult"></include>
+                </if>
+                <if test="fetchFields!=null">
+                    <if test="fetchFields.AllFields !=null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields ==null and fetchFields.fetchFields==null and fetchFields.excludeFields==null and fetchFields.otherFields==null">
+                        <include refid="allResult"></include>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.fetchFields!=null">
+                    <if test="fetchFields.fetchFields.id==true">
+                        `id`,
+                    </if>
+                    <if test="fetchFields.fetchFields.score==true">
+                        `score`,
+                    </if>
+                    <if test="fetchFields.fetchFields.user_rank==true">
+                        `user_rank`,
+                    </if>
+                    <if test="fetchFields.fetchFields.victories==true">
+                        `victories`,
+                    </if>
+                    <if test="fetchFields.fetchFields.defeats==true">
+                        `defeats`,
+                    </if>
+                    <if test="fetchFields.fetchFields.win_rate==true">
+                        `win_rate`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.AllFields==null and fetchFields.excludeFields!=null">
+                    <if test="fetchFields.excludeFields.id==null">
+                        `id`,
+                    </if>
+                    <if test="fetchFields.excludeFields.score==null">
+                        `score`,
+                    </if>
+                    <if test="fetchFields.excludeFields.user_rank==null">
+                        `user_rank`,
+                    </if>
+                    <if test="fetchFields.excludeFields.victories==null">
+                        `victories`,
+                    </if>
+                    <if test="fetchFields.excludeFields.defeats==null">
+                        `defeats`,
+                    </if>
+                    <if test="fetchFields.excludeFields.win_rate==null">
+                        `win_rate`,
+                    </if>
+                    </if>
+                    <if test="fetchFields.otherFields!=null and fetchFields.otherFields.size>0">
+                        <foreach collection="fetchFields.otherFields" index="index" item="item" separator=",">
+                        `#{item}`
+                        </foreach>
+                    </if>
+                </if>
+            </if>
+            <if test="(_parameter instanceof com.pcx.model.Userstats$QueryBuilder) == false" >
+                <include refid="allResult"></include>
+            </if>
+
+        </trim>
+    </sql>
+
+
+</mapper>
